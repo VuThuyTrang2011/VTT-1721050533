@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Data;
-using System.Data.Entity;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -10,119 +8,109 @@ using VTT1721050533_.Models;
 
 namespace VTT1721050533_.Controllers
 {
-    public class PersonController : Controller
+    public class StudentController : Controller
     {
         private QL db = new QL();
-        Autogenkey auto = new Autogenkey();
-        // GET: People
+
+        public object EntityState { get; private set; }
+
+        // GET: Student
         public ActionResult Index()
         {
-            return View(db.Persons.ToList());
+            return View(db.Students.ToList());
         }
 
-        // GET: People/Details/5
+        // GET: Students/Details/5
         public ActionResult Details(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Person person = db.Persons.Find(id);
-            if (person == null)
+            Student student = db.Students.Find(id);
+            if (student == null)
             {
                 return HttpNotFound();
             }
-            return View(person);
+            return View(student);
         }
 
-        // GET: People/Create
+        // GET: Students/Create
         public ActionResult Create()
         {
-            if (db.Persons.OrderByDescending(m => m.PersonID).Count() == 0)
-            {
-                var newID = "PER001";
-                ViewBag.newid = newID;
-            }
-            else
-            {
-                var PsID = db.Persons.OrderByDescending(m => m.PersonID).FirstOrDefault().PersonID;
-                var newID = auto.GenKey("PER", PsID);
-                ViewBag.newid = newID;
-            }
-
             return View();
         }
 
-        // POST: People/Create
+        // POST: Students/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "perSonID,perSonName")] Person person)
+        public ActionResult Create([Bind(Include = "PersonID,PersonName,University,Address")] Student student)
         {
             if (ModelState.IsValid)
             {
-                db.Persons.Add(person);
+                db.Students.Add(student);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(person);
+            return View(student);
         }
 
-        // GET: People/Edit/5
+        // GET: Students/Edit/5
         public ActionResult Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Person person = db.Persons.Find(id);
-            if (person == null)
+            Student student = db.Students.Find(id);
+            if (student == null)
             {
                 return HttpNotFound();
             }
-            return View(person);
+            return View(student);
         }
 
-        // POST: People/Edit/5
+        // POST: Students/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "perSonID,perSonName")] Person person)
+        public ActionResult Edit([Bind(Include = "PersonID,PersonName,University,Address")] Student student)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(person).State = EntityState.Modified;
+ 
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(person);
+            return View(student);
         }
 
-        // GET: People/Delete/5
+        // GET: Students/Delete/5
         public ActionResult Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Person person = db.Persons.Find(id);
-            if (person == null)
+            Student student = db.Students.Find(id);
+            if (student == null)
             {
                 return HttpNotFound();
             }
-            return View(person);
+            return View(student);
         }
 
-        // POST: People/Delete/5
+        // POST: Students/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            Person person = db.Persons.Find(id);
-            db.Persons.Remove(person);
+            Student student = db.Students.Find(id);
+            db.Students.Remove(student);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
